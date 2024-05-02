@@ -1,0 +1,34 @@
+name: C++ CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up CMake
+      uses: mooreryan/setup-cmake@v2
+      with:
+        cmake-version: '3.21.3'
+
+    - name: Configure CMake
+      run: cmake -S . -B build
+
+    - name: Build
+      run: cmake --build build
+
+    - name: Run Program
+      run: ./build/hello  # Replace 'hello' with your executable name
+
+    - name: Check Output
+      run: |
+        output=$(./build/hello)  # Replace 'hello' with your executable name
+        if [[ "$output" == "Hello Golda Sussman, thank you" ]]; then
+          echo "Output is correct!"
+        else
+          echo "Output is incorrect!"
+          exit 1
+        fi
